@@ -13,17 +13,17 @@ namespace InvoiceGenerator.Web.Controllers
 {
     public class InvoicesController : Controller
     {
-		private readonly IInvoiceRepository _invoiceRepository;
+		private readonly IUnitOfWork _unitOfWork;
 
-		public InvoicesController(IInvoiceRepository invoiceRepository)
+		public InvoicesController(IUnitOfWork unitOfWork)
         {
-			this._invoiceRepository = invoiceRepository;
+			this._unitOfWork = unitOfWork;
 		}
 
         // GET: Invoices
         public async Task<IActionResult> Index()
         {
-            return View(_invoiceRepository.GetAll());
+            return View(_unitOfWork.Invoice.GetAll());
         }
 
         // GET: Invoices/Details/5
@@ -34,7 +34,7 @@ namespace InvoiceGenerator.Web.Controllers
                 return NotFound();
             }
 
-            var invoice = _invoiceRepository.Get(m => m.Id == id);
+            var invoice = _unitOfWork.Invoice.Get(m => m.Id == id);
             if (invoice == null)
             {
                 return NotFound();
@@ -58,8 +58,8 @@ namespace InvoiceGenerator.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-				_invoiceRepository.Add(invoice);
-                _invoiceRepository.Save();
+				_unitOfWork.Invoice.Add(invoice);
+				_unitOfWork.Save();
                 return RedirectToAction(nameof(Index));
             }
             return View(invoice);
@@ -73,7 +73,7 @@ namespace InvoiceGenerator.Web.Controllers
                 return NotFound();
             }
 
-            var invoice = _invoiceRepository.Get(p=>p.Id == id);
+            var invoice = _unitOfWork.Invoice.Get(p=>p.Id == id);
             if (invoice == null)
             {
                 return NotFound();
@@ -97,8 +97,8 @@ namespace InvoiceGenerator.Web.Controllers
             {
                 try
                 {
-                    _invoiceRepository.Update(invoice);
-                    _invoiceRepository.Save();
+					_unitOfWork.Invoice.Update(invoice);
+					_unitOfWork.Save();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -124,7 +124,7 @@ namespace InvoiceGenerator.Web.Controllers
                 return NotFound();
             }
 
-            var invoice = _invoiceRepository.Get(m => m.Id == id);
+            var invoice = _unitOfWork.Invoice.Get(m => m.Id == id);
             if (invoice == null)
             {
                 return NotFound();
@@ -138,19 +138,19 @@ namespace InvoiceGenerator.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var invoice = _invoiceRepository.Get(p => p.Id == id);
+            var invoice = _unitOfWork.Invoice.Get(p => p.Id == id);
             if (invoice != null)
             {
-				_invoiceRepository.Remove(invoice);
+				_unitOfWork.Invoice.Remove(invoice);
             }
 
-            _invoiceRepository.Save();
+			_unitOfWork.Save();
             return RedirectToAction(nameof(Index));
         }
 
         private bool InvoiceExists(int id)
         {
-            return _invoiceRepository.Exists(e => e.Id == id);
+            return _unitOfWork.Invoice.Any(e => e.Id == id);
         }
     }
 }

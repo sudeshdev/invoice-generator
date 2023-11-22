@@ -40,7 +40,7 @@ namespace InvoiceGenerator.Infrastructure.Repository
 			return query.FirstOrDefault();
 		}
 
-		public bool Exists(Expression<Func<T, bool>>? filter = null)
+		public bool Any(Expression<Func<T, bool>>? filter)
 		{
 			IQueryable<T> query = dbSet;
 			if (filter != null)

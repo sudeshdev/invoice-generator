@@ -20,11 +20,6 @@ namespace InvoiceGenerator.Infrastructure.Repository
 			_context = context;
 		}
 
-		public void Save()
-		{
-			_context.SaveChanges();
-		}
-
 		public void Update(Invoice entity)
 		{
 			_context.Update(entity);

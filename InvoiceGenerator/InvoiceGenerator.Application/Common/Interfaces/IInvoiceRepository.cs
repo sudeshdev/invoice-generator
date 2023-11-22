@@ -11,6 +11,5 @@ namespace InvoiceGenerator.Application.Common.Interfaces
     public interface IInvoiceRepository : IRepository<Invoice>
     {
         void Update(Invoice entity);
-        void Save();
     }
 }

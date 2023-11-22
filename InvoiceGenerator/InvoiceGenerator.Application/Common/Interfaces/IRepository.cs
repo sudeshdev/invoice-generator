@@ -12,7 +12,7 @@ namespace InvoiceGenerator.Application.Common.Interfaces
 	{
 		IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter = null, string? includeProperties = null);
 		T? Get(Expression<Func<T, bool>>? filter = null, string? includeProperties = null);
-		bool Exists(Expression<Func<T, bool>>? filter = null);
+		bool Any(Expression<Func<T, bool>> filter);
 		void Add(T entity);
 		void Remove(T entity);
 	}

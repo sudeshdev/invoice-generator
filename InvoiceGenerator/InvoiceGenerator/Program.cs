@@ -7,7 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<InvoiceGeneratorDBContext>(options => options.UseSqlServer("name=ConnectionStrings:DefaultConnection"));
 
-builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
