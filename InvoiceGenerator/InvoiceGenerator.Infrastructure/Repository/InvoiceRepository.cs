@@ -1,4 +1,4 @@
-﻿using InvoiceGenerator.Application.Common;
+﻿using InvoiceGenerator.Application.Common.Interfaces;
 using InvoiceGenerator.Domain;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace InvoiceGenerator.Infrastructure.Repository
 {
-	public class InvoiceRepository : IInvoiceRepository
+    public class InvoiceRepository : IInvoiceRepository
 	{
 
 		private readonly InvoiceGeneratorDBContext _context;

@@ -1,4 +1,4 @@
-using InvoiceGenerator.Application.Common;
+using InvoiceGenerator.Application.Common.Interfaces;
 using InvoiceGenerator.Infrastructure;
 using InvoiceGenerator.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using InvoiceGenerator.Domain;
 using InvoiceGenerator.Infrastructure;
-using InvoiceGenerator.Application.Common;
+using InvoiceGenerator.Application.Common.Interfaces;
 
 namespace InvoiceGenerator.Web.Controllers
 {
