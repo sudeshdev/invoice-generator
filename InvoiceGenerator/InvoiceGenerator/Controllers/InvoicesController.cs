@@ -7,22 +7,23 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using InvoiceGenerator.Domain;
 using InvoiceGenerator.Infrastructure;
+using InvoiceGenerator.Application.Common;
 
 namespace InvoiceGenerator.Web.Controllers
 {
     public class InvoicesController : Controller
     {
-        private readonly InvoiceGeneratorDBContext _context;
+		private readonly IInvoiceRepository _invoiceRepository;
 
-        public InvoicesController(InvoiceGeneratorDBContext context)
+		public InvoicesController(IInvoiceRepository invoiceRepository)
         {
-            _context = context;
-        }
+			this._invoiceRepository = invoiceRepository;
+		}
 
         // GET: Invoices
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Invoices.ToListAsync());
+            return View(_invoiceRepository.GetAll());
         }
 
         // GET: Invoices/Details/5
@@ -33,8 +34,7 @@ namespace InvoiceGenerator.Web.Controllers
                 return NotFound();
             }
 
-            var invoice = await _context.Invoices
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var invoice = _invoiceRepository.Get(m => m.Id == id);
             if (invoice == null)
             {
                 return NotFound();
@@ -58,8 +58,8 @@ namespace InvoiceGenerator.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(invoice);
-                await _context.SaveChangesAsync();
+				_invoiceRepository.Add(invoice);
+                _invoiceRepository.Save();
                 return RedirectToAction(nameof(Index));
             }
             return View(invoice);
@@ -73,7 +73,7 @@ namespace InvoiceGenerator.Web.Controllers
                 return NotFound();
             }
 
-            var invoice = await _context.Invoices.FindAsync(id);
+            var invoice = _invoiceRepository.Get(p=>p.Id == id);
             if (invoice == null)
             {
                 return NotFound();
@@ -97,8 +97,8 @@ namespace InvoiceGenerator.Web.Controllers
             {
                 try
                 {
-                    _context.Update(invoice);
-                    await _context.SaveChangesAsync();
+                    _invoiceRepository.Update(invoice);
+                    _invoiceRepository.Save();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -124,8 +124,7 @@ namespace InvoiceGenerator.Web.Controllers
                 return NotFound();
             }
 
-            var invoice = await _context.Invoices
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var invoice = _invoiceRepository.Get(m => m.Id == id);
             if (invoice == null)
             {
                 return NotFound();
@@ -139,19 +138,19 @@ namespace InvoiceGenerator.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var invoice = await _context.Invoices.FindAsync(id);
+            var invoice = _invoiceRepository.Get(p => p.Id == id);
             if (invoice != null)
             {
-                _context.Invoices.Remove(invoice);
+				_invoiceRepository.Remove(invoice);
             }
 
-            await _context.SaveChangesAsync();
+            _invoiceRepository.Save();
             return RedirectToAction(nameof(Index));
         }
 
         private bool InvoiceExists(int id)
         {
-            return _context.Invoices.Any(e => e.Id == id);
+            return _invoiceRepository.Exists(e => e.Id == id);
         }
     }
 }

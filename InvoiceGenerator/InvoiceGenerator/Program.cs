@@ -1,10 +1,13 @@
+using InvoiceGenerator.Application.Common;
 using InvoiceGenerator.Infrastructure;
+using InvoiceGenerator.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<InvoiceGeneratorDBContext>(options => options.UseSqlServer("name=ConnectionStrings:DefaultConnection"));
 
+builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
