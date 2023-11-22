@@ -10,69 +10,14 @@ using System.Threading.Tasks;
 
 namespace InvoiceGenerator.Infrastructure.Repository
 {
-    public class InvoiceRepository : IInvoiceRepository
+    public class InvoiceRepository : Repository<Invoice>, IInvoiceRepository
 	{
 
 		private readonly InvoiceGeneratorDBContext _context;
 
-		public InvoiceRepository(InvoiceGeneratorDBContext context)
+		public InvoiceRepository(InvoiceGeneratorDBContext context) : base(context)
 		{
 			_context = context;
-		}
-
-
-		public Invoice? Get(Expression<Func<Invoice, bool>>? filter = null, string? includeProperties = null)
-		{
-			IQueryable<Invoice> query = _context.Set<Invoice>();
-			if (filter != null)
-			{
-				query = query.Where(filter);
-			}
-			if (!string.IsNullOrWhiteSpace(includeProperties))
-			{
-				foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-				{
-					query = query.Include(includeProp);
-				}
-			}
-			return query.FirstOrDefault();
-		}
-
-		public bool Exists(Expression<Func<Invoice, bool>>? filter = null)
-		{
-			IQueryable<Invoice> query = _context.Set<Invoice>();
-			if (filter != null)
-			{
-				query = query.Where(filter);
-			}
-			return query.Any();
-		}
-
-		public IEnumerable<Invoice> GetAll(Expression<Func<Invoice, bool>>? filter = null, string? includeProperties = null)
-		{
-			IQueryable<Invoice> query = _context.Set<Invoice>();
-			if(filter != null)
-			{
-				query = query.Where(filter);
-			}
-			if (!string.IsNullOrWhiteSpace(includeProperties))
-			{
-				foreach (var includeProp in includeProperties.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries))
-				{
-					query = query.Include(includeProp);
-				}
-			}
-			return query.ToList();
-		}
-
-		public void Add(Invoice entity)
-		{
-			_context.Add(entity);
-		}
-
-		public void Remove(Invoice entity)
-		{
-			_context.Remove(entity);
 		}
 
 		public void Save()

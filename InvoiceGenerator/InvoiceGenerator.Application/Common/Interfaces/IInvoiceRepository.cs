@@ -8,14 +8,9 @@ using System.Threading.Tasks;
 
 namespace InvoiceGenerator.Application.Common.Interfaces
 {
-    public interface IInvoiceRepository
+    public interface IInvoiceRepository : IRepository<Invoice>
     {
-        IEnumerable<Invoice> GetAll(Expression<Func<Invoice, bool>>? filter = null, string? includeProperties = null);
-        Invoice? Get(Expression<Func<Invoice, bool>>? filter = null, string? includeProperties = null);
-        bool Exists(Expression<Func<Invoice, bool>>? filter = null);
-        void Add(Invoice entity);
         void Update(Invoice entity);
-        void Remove(Invoice entity);
         void Save();
     }
 }
